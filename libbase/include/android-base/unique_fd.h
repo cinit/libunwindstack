@@ -29,7 +29,7 @@
 // Including other headers from libbase frequently results in inclusion of
 // android-base/macros.h, which causes macro collisions.
 
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0 // introduced in API 29, don't use it.
 #include <android/fdsan.h>
 #endif
 #if !defined(_WIN32) && !defined(__TRUSTY__)
@@ -151,7 +151,7 @@ class unique_fd_impl final {
 // The actual details of closing are factored out to support unusual cases.
 // Almost everyone will want this DefaultCloser, which handles fdsan on bionic.
 struct DefaultCloser {
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0 // introduced in API 29, don't use it.
   static void Tag(int fd, void* old_addr, void* new_addr) {
     if (android_fdsan_exchange_owner_tag) {
       uint64_t old_tag = android_fdsan_create_owner_tag(ANDROID_FDSAN_OWNER_TYPE_UNIQUE_FD,

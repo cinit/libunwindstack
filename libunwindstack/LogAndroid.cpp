@@ -23,7 +23,7 @@
 #define LOG_TAG "unwind"
 #include <log/log.h>
 
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0
 #include <async_safe/log.h>
 #endif
 #include <android-base/stringprintf.h>
@@ -66,7 +66,7 @@ void Error(const char* format, ...) {
   va_end(args);
 }
 
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0
 void AsyncSafe(const char* format, ...) {
   va_list args;
   va_start(args, format);

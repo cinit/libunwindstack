@@ -202,6 +202,7 @@ add_library(unwindstack STATIC
 
 target_include_directories(unwindstack BEFORE
         PUBLIC "libunwindstack/include"
+        PRIVATE "platform"
         )
 target_compile_options(unwindstack PRIVATE -Wno-c99-designator -Wno-deprecated-declarations
         -Wexit-time-destructors -fno-c++-static-destructors)
