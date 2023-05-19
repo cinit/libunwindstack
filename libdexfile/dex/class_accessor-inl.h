@@ -19,7 +19,7 @@
 
 #include "class_accessor.h"
 
-#include "base/hiddenapi_flags.h"
+//#include "base/hiddenapi_flags.h"
 #include "base/leb128.h"
 #include "base/utils.h"
 #include "class_iterator.h"
@@ -68,8 +68,8 @@ inline void ClassAccessor::Method::Read() {
   access_flags_ = DecodeUnsignedLeb128(&ptr_pos_);
   code_off_ = DecodeUnsignedLeb128(&ptr_pos_);
   if (hiddenapi_ptr_pos_ != nullptr) {
-    hiddenapi_flags_ = DecodeUnsignedLeb128(&hiddenapi_ptr_pos_);
-    DCHECK(hiddenapi::ApiList(hiddenapi_flags_).IsValid());
+//    hiddenapi_flags_ = DecodeUnsignedLeb128(&hiddenapi_ptr_pos_);
+//    DCHECK(hiddenapi::ApiList(hiddenapi_flags_).IsValid());
   }
 }
 
@@ -82,8 +82,8 @@ inline void ClassAccessor::Field::Read() {
   index_ += DecodeUnsignedLeb128(&ptr_pos_);
   access_flags_ = DecodeUnsignedLeb128(&ptr_pos_);
   if (hiddenapi_ptr_pos_ != nullptr) {
-    hiddenapi_flags_ = DecodeUnsignedLeb128(&hiddenapi_ptr_pos_);
-    DCHECK(hiddenapi::ApiList(hiddenapi_flags_).IsValid());
+//    hiddenapi_flags_ = DecodeUnsignedLeb128(&hiddenapi_ptr_pos_);
+//    DCHECK(hiddenapi::ApiList(hiddenapi_flags_).IsValid());
   }
 }
 

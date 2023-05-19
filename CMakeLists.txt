@@ -95,16 +95,16 @@ add_library(dexfile_stub STATIC
         #        "libdexfile/dex/signature.cc"
         #        "libdexfile/dex/standard_dex_file.cc"
         #        "libdexfile/dex/type_lookup_table.cc"
-        "libdexfile/dex/utf.cc"
-        #        "libdexfile/external/dex_file_ext.cc"
-        #
-        #        "libdexfile/external/dex_file_supp.cc"
+        # "libdexfile/dex/utf.cc"
+                "libdexfile/external/dex_file_ext.cc"
+                "libdexfile/external/dex_file_supp.cc"
 
         )
 
 target_include_directories(dexfile_stub BEFORE
         PUBLIC "libdexfile"
         PUBLIC "libdexfile/external/include"
+        PUBLIC "libnativehelper/include_jni"
         PRIVATE "libartbase"
         #        PUBLIC "${MDVM_NATIVE_SRC_ROOT_DIR}/libnativehelper/include_jni"
         #        PRIVATE "$<TARGET_PROPERTY:artbase,INTERFACE_INCLUDE_DIRECTORIES>"
@@ -206,6 +206,7 @@ target_include_directories(unwindstack BEFORE
         )
 target_compile_options(unwindstack PRIVATE -Wno-c99-designator -Wno-deprecated-declarations
         -Wexit-time-destructors -fno-c++-static-destructors)
+target_compile_definitions(unwindstack PRIVATE DEXFILE_SUPPORT=1)
 
 target_link_libraries(unwindstack lzma base dexfile_stub procinfo)
 
