@@ -255,7 +255,7 @@ constexpr size_t GetBytesPerFprSpillLocation(InstructionSet isa) {
 
 // Returns the instruction sets supported by the device, or an empty list on failure.
 std::vector<InstructionSet> GetSupportedInstructionSets(std::string* error_msg);
-
+/*
 namespace instruction_set_details {
 
 #if !defined(ART_STACK_OVERFLOW_GAP_arm) || !defined(ART_STACK_OVERFLOW_GAP_arm64) || \
@@ -299,7 +299,7 @@ constexpr size_t GetStackOverflowReservedBytes(InstructionSet isa) {
   }
   instruction_set_details::GetStackOverflowReservedBytesFailure("Unknown instruction set");
 }
-
+*/
 // The following definitions create return types for two word-sized entities that will be passed
 // in registers so that memory operations for the interface trampolines can be avoided. The entities
 // are the resolved method and the pointer to the code to be invoked.

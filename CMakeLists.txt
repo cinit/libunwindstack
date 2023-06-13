@@ -96,9 +96,16 @@ add_library(dexfile_stub STATIC
         #        "libdexfile/dex/standard_dex_file.cc"
         #        "libdexfile/dex/type_lookup_table.cc"
         # "libdexfile/dex/utf.cc"
-                "libdexfile/external/dex_file_ext.cc"
-                "libdexfile/external/dex_file_supp.cc"
+        "libdexfile/external/dex_file_ext.cc"
+        "libdexfile/external/dex_file_supp.cc"
 
+        "libartbase/base/unix_file/fd_file.cc"
+        "libartbase/base/logging.cc"
+        "libartbase/base/utils.cc"
+
+        "libartbase/gen/libartbase.operator_out.cc"
+        "libartbase/base/runtime_common.cc"
+        "libartbase/base/native_stack_dump.cc"
         )
 
 target_include_directories(dexfile_stub BEFORE
@@ -106,13 +113,21 @@ target_include_directories(dexfile_stub BEFORE
         PUBLIC "libdexfile/external/include"
         PUBLIC "libnativehelper/include_jni"
         PRIVATE "libartbase"
+        PRIVATE "runtime"
         #        PUBLIC "${MDVM_NATIVE_SRC_ROOT_DIR}/libnativehelper/include_jni"
         #        PRIVATE "$<TARGET_PROPERTY:artbase,INTERFACE_INCLUDE_DIRECTORIES>"
         )
 
+# check if we are targeting Android or Linux
+if (ANDROID)
+    target_compile_definitions(dexfile_stub PUBLIC -DART_TARGET -DART_TARGET_ANDROID)
+else ()
+    target_compile_definitions(dexfile_stub PUBLIC -DART_TARGET -DART_TARGET_LINUX)
+endif ()
+
 target_compile_options(dexfile_stub PRIVATE ${ART_COMPILE_C_FLAGS} -Wno-deprecated-declarations)
 
-target_link_libraries(dexfile_stub base)
+target_link_libraries(dexfile_stub base unwindstack)
 
 add_library(lzma STATIC
         "lzma/C/7zAlloc.c"
@@ -212,9 +227,11 @@ target_link_libraries(unwindstack lzma base dexfile_stub procinfo)
 
 # check if we are building for Android
 if (ANDROID)
-    add_executable(test test/test.cc)
-    target_link_libraries(test unwindstack log)
+    add_executable(unwindstack_test test/test.cc)
+    target_include_directories(unwindstack_test PRIVATE libartbase)
+    target_link_libraries(unwindstack_test unwindstack log)
 else ()
-    add_executable(test test/test.cc test/android_log_impl.cc)
-    target_link_libraries(test unwindstack pthread)
+    add_executable(unwindstack_test test/test.cc test/android_log_impl.cc)
+    target_include_directories(unwindstack_test PRIVATE libartbase)
+    target_link_libraries(unwindstack_test unwindstack pthread)
 endif ()
