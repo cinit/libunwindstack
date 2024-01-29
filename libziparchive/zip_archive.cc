@@ -144,7 +144,7 @@ constexpr auto kPageSize = 4096;
 #endif
 }
 
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0
 static uint64_t GetOwnerTag(const ZipArchive* archive) {
   return android_fdsan_create_owner_tag(ANDROID_FDSAN_OWNER_TYPE_ZIPARCHIVE,
                                         reinterpret_cast<uint64_t>(archive));
@@ -158,7 +158,7 @@ ZipArchive::ZipArchive(MappedZipFile&& map, bool assume_ownership)
       central_directory(),
       directory_map(),
       num_entries(0) {
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0
   if (assume_ownership) {
     CHECK(mapped_zip.GetFileDescriptor() >= 0 || !mapped_zip.GetBasePtr());
     android_fdsan_exchange_owner_tag(mapped_zip.GetFileDescriptor(), 0, GetOwnerTag(this));
@@ -176,7 +176,7 @@ ZipArchive::ZipArchive(const void* address, size_t length)
 
 ZipArchive::~ZipArchive() {
   if (close_file && mapped_zip.GetFileDescriptor() >= 0) {
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) && 0
     android_fdsan_close_with_tag(mapped_zip.GetFileDescriptor(), GetOwnerTag(this));
 #else
     close(mapped_zip.GetFileDescriptor());

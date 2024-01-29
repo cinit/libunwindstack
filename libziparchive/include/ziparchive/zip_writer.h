@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <ctime>
 
-#include <gtest/gtest_prod.h>
+//#include <gtest/gtest_prod.h>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -191,5 +191,5 @@ class ZipWriter {
   std::unique_ptr<z_stream, void (*)(z_stream*)> z_stream_;
   std::vector<uint8_t> buffer_;
 
-  FRIEND_TEST(zipwriter, WriteToUnseekableFile);
+//  FRIEND_TEST(zipwriter, WriteToUnseekableFile);
 };
