@@ -19,7 +19,7 @@
 
 #include "class_accessor.h"
 
-//#include "base/hiddenapi_flags.h"
+#include "base/hiddenapi_flags.h"
 #include "base/leb128.h"
 #include "base/utils.h"
 #include "class_iterator.h"

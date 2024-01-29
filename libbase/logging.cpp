@@ -314,7 +314,7 @@ static void LogdLogChunk(LogId id, LogSeverity severity, const char* tag, const 
   int32_t lg_id = LogIdTolog_id_t(id);
   int32_t priority = LogSeverityToPriority(severity);
 
-    if constexpr(false && __builtin_available(android 30, *)) {
+    if constexpr(false/* && __builtin_available(android 30, *)*/) {
     //__android_log_message log_message = {sizeof(__android_log_message),     lg_id, priority, tag,
     //                                     static_cast<const char*>(nullptr), 0,     message};
     //__android_log_logd_logger(&log_message);
