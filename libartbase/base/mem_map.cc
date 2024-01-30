@@ -119,6 +119,10 @@ static constexpr uintptr_t LOW_MEM_START = 64 * KB;
 // Function is standalone so it can be tested somewhat in mem_map_test.cc.
 #ifdef __BIONIC__
 uintptr_t CreateStartPos(uint64_t input) {
+#ifndef ART_BASE_ADDRESS
+  constexpr uint32_t ART_BASE_ADDRESS = 0x70000000;
+  // This is the default value for ART_BASE_ADDRESS in the Android runtime.
+#endif
   CHECK_NE(0, ART_BASE_ADDRESS);
 
   // Start with all bits below highest bit in ART_BASE_ADDRESS.

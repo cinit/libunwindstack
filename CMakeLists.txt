@@ -85,6 +85,7 @@ add_library(ziparchive STATIC
         "${libziparchive_src_dir}/zip_cd_entry_map.cc"
         "${libziparchive_src_dir}/zip_error.cpp"
         "${libziparchive_src_dir}/zip_writer.cc"
+        "${libziparchive_src_dir}/incfs_support/signal_handling.cpp"
 )
 
 # libziparchive requires cxx2a
