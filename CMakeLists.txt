@@ -10,6 +10,13 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fvisibility=hidden")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fvisibility=hidden")
 
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-allow-shlib-undefined,--no-undefined -Wl,-z,text,-z,defs,-z,now,-z,relro")
+# prefer static libgcc and libstdc++
+#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -Werror=non-virtual-dtor -Werror=delete-non-virtual-dtor")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
+
 if (DEFINED ANDROID_ABI)
     if (ANDROID_ABI STREQUAL "x86")
         set(UNWINDSTACK_ARCH "x86")
@@ -260,13 +267,33 @@ target_compile_definitions(unwindstack PRIVATE DEXFILE_SUPPORT=1)
 
 target_link_libraries(unwindstack lzma base dexfile_stub procinfo)
 
-# check if we are building for Android
-if (ANDROID)
-    add_executable(unwindstack_test test/test.cc)
-    target_include_directories(unwindstack_test PRIVATE libartbase)
-    target_link_libraries(unwindstack_test unwindstack log)
-else ()
-    add_executable(unwindstack_test test/test.cc test/android_log_impl.cc)
-    target_include_directories(unwindstack_test PRIVATE libartbase)
-    target_link_libraries(unwindstack_test unwindstack pthread)
+# check are we top-level project
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+
+    # check if we are building for Android
+    if (ANDROID)
+        add_executable(unwindstack_test
+                preload/init_handler.cc
+                test/test.cc
+        )
+        target_include_directories(unwindstack_test PRIVATE libartbase)
+        target_link_libraries(unwindstack_test unwindstack log)
+    else ()
+        add_executable(unwindstack_test
+                preload/init_handler.cc
+                test/test.cc
+                log_stub/android_log_impl.cc
+        )
+        target_include_directories(unwindstack_test PRIVATE libartbase)
+        target_link_libraries(unwindstack_test unwindstack pthread)
+
+        add_library(unwindstack-preload SHARED
+                preload/preload_entry.c
+                preload/init_handler.cc
+                log_stub/android_log_impl.cc
+        )
+        target_include_directories(unwindstack-preload PRIVATE libartbase)
+        target_link_libraries(unwindstack-preload unwindstack pthread)
+    endif ()
+
 endif ()
