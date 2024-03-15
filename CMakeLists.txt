@@ -17,6 +17,8 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-allow-shlib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -Werror=non-virtual-dtor -Werror=delete-non-virtual-dtor")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
 
+include_directories(misc)
+
 if (DEFINED ANDROID_ABI)
     if (ANDROID_ABI STREQUAL "x86")
         set(UNWINDSTACK_ARCH "x86")
@@ -261,8 +263,12 @@ target_include_directories(unwindstack BEFORE
         PUBLIC "libunwindstack/include"
         PRIVATE "platform"
 )
-target_compile_options(unwindstack PRIVATE -Wno-c99-designator -Wno-deprecated-declarations
-        -Wexit-time-destructors -fno-c++-static-destructors)
+target_compile_options(unwindstack PRIVATE -Wno-c99-designator -Wno-deprecated-declarations)
+# for clang
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(unwindstack PRIVATE -Wexit-time-destructors -fno-c++-static-destructors)
+endif ()
+
 target_compile_definitions(unwindstack PRIVATE DEXFILE_SUPPORT=1)
 
 target_link_libraries(unwindstack lzma base dexfile_stub procinfo)

@@ -22,6 +22,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+#include "nullability.h"
+
 __BEGIN_DECLS
 
 // This is the stable C ABI that backs art_api::dex below. Structs and functions
