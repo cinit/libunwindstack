@@ -32,6 +32,7 @@
 #include <string>
 
 #include <android-base/unique_fd.h>
+#include <android-base/macros.h> // TEMP_FAILURE_RETRY
 
 #include <unwindstack/Log.h>
 #include <unwindstack/Memory.h>

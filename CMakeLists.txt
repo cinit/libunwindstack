@@ -19,6 +19,14 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
 
 include_directories(misc)
 
+include(CheckIncludeFile)
+# new version of musl do not have <sys/cdefs.h>
+CHECK_INCLUDE_FILE("sys/cdefs.h" HAVE_SYS_CDEFS_H)
+if (NOT HAVE_SYS_CDEFS_H)
+    include_directories(misc/musl_stub)
+    message(STATUS "Using musl stub for missing sys/cdefs.h")
+endif ()
+
 if (DEFINED ANDROID_ABI)
     if (ANDROID_ABI STREQUAL "x86")
         set(UNWINDSTACK_ARCH "x86")

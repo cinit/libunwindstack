@@ -34,6 +34,14 @@
 
 #include "ThreadEntry.h"
 
+// for tgkill on musl
+#if !defined(__GLIBC__) && !defined(__BIONIC__)
+#include <syscall.h>
+static int tgkill(int tgid, int tid, int sig) {
+  return syscall(__NR_tgkill, tgid, tid, sig);
+}
+#endif
+
 namespace unwindstack {
 
 static void SignalLogOnly(int, siginfo_t*, void*) {
